@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+ wordpress:
+  image: wordpress:latest
+  container_name: wordpress_container
+  ports:
+     - "8012:80"
+  environment:
+    WORDPRESS_DB_HOST: db:3306
+    WORDPRESS_DB_USER: teste
+    WORDPRESS_DB_PASSWORD: teste
+    WORDPRESS_DB_NAME: teste
+  volumes:
+   - ./volumes/html:/var/www/html
+
+ db:
+  image: mysql:5.7
+  environment:
+    MYSQL_ROOT_PASSWORD: teste
+    MYSQL_DATABASE: teste
+    MYSQL_USER: teste
+    MYSQL_PASSWORD: teste
+  volumes:
+  - ./volumes/data:/var/lib/mysql
+  - ./volumes/init.d:/docker-entrypoint-initdb.d
+
+volumes:
+  wp_root:
