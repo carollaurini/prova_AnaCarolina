@@ -10,6 +10,7 @@ col_r  =  requests.get(col_endpoint).json() #resultado da consulta das coleçõe
 for collection in col_r:  #Cria um dicionário com os dados das coleções encontradas
     colDict[collection['name']] = {'id':collection['id'], 'total_items':collection['total_items']['publish']}
 
+rows = []
 for collectionName in colDict.keys():#itera para cada coleção encontrada
     total_pages = int(colDict[collectionName]['total_items'])/25 ##calcula o total de páginas de resultados
     print("Coletado dados para a coleção {}".format(collectionName))
@@ -28,4 +29,12 @@ for collectionName in colDict.keys():#itera para cada coleção encontrada
                     valor = item['metadata'][metadata]['value_as_string']#armazena os valores do metadado
                     if valor == "": #desconsidera valores nulos
                         continue
-                    else:#Salve os valores das variáveis “metadado” em colunas e “valor” em linhas em um CSV.
+                    else: #Salve os valores das variáveis “metadado” em colunas e “valor” em linhas em um CSV.
+                        rows.append([metadado,valor])
+
+
+#Cria o dataframe
+df = pd.DataFrame(rows,columns=["metadado","valor"])
+
+#Salva o dataframe em csv . Usei separacao por ; para melhor visualizar o arquivo csv no excel
+df.to_csv("base_out3.csv",index=False,sep=';',encoding='utf-16')
